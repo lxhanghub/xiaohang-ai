@@ -6,6 +6,7 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Microsoft.SemanticKernel;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

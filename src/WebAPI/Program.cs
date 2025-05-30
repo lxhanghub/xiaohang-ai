@@ -15,7 +15,7 @@ try
     builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 
     builder.Services.AddDomainService();
-    builder.Services.AddApplicationServices();
+    builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddWebServices(builder.Configuration);
 
@@ -35,10 +35,10 @@ try
             RequireExpirationTime = true,
         };
     });
+    
     builder.Services.AddAuthorization();
 
     builder.Services.AddHostedService<SendDataBackgroundService>();
-
 
     var app = builder.Build();
 
