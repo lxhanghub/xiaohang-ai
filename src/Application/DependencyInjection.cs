@@ -27,8 +27,13 @@ public static class DependencyInjection
         });
 
         // Fix for CS1061: Ensure the Get<T>() method is used correctly with IConfiguration
-        var aiSettings = configuration.GetSection("AiModels").Get<AiSettings>();
+        var aiSettings = new AiSettings
+        {
+            AiModels = configuration.GetSection("AiModels").Get<Dictionary<string, AiModelConfig>>() ?? new()
+        };
 
+        services.AddSingleton(aiSettings);
+        
         var kernelBuilder = Kernel.CreateBuilder();
         AddAIChatCompletion(kernelBuilder, aiSettings!.AiModels["Text"].Models);
         // Fix for CS1503: Use a factory method to resolve IKernel  

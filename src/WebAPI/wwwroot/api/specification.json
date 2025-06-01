@@ -35,6 +35,63 @@
           }
         }
       }
+    },
+    "/api/v1/Chat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "ChatAsync",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Chat/stream": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "ChatStreamAsync",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatStreamQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -47,6 +104,24 @@
             "type": "string"
           },
           "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatStreamQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "message": {
             "type": "string"
           }
         }
