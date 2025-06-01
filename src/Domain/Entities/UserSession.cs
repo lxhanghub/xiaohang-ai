@@ -8,8 +8,6 @@ using Microsoft.SemanticKernel.ChatCompletion;
 namespace Domain.Entities;
 public class UserSession: AggregateRoot<Guid>
 {
-    public ChatHistory ChatHistory { get; set; } 
-
     public Guid UserId { get; set; }
 
 

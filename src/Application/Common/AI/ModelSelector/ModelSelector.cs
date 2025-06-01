@@ -8,22 +8,24 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.TextToAudio;
 using Microsoft.SemanticKernel.TextToImage;
 using Microsoft.SemanticKernel;
+using Microsoft.Extensions.Options;
 
 namespace Application.Common.AI.ModelSelector;
+
 public class ModelSelector : IModelSelector
 {
     private readonly Kernel _kernel;
-    private readonly AiSettings _aiSettings;
+    private readonly AiModels _aiSettings;
 
-    public ModelSelector(Kernel kernel, AiSettings aiSettings)
+    public ModelSelector(Kernel kernel, IOptions<AiModels> options)
     {
         _kernel = kernel;
-        _aiSettings = aiSettings;
+        _aiSettings = options.Value;
     }
 
     public IChatCompletionService GetTextModel(string? modelId = null)
     {
-        modelId ??= _aiSettings.AiModels["Text"].DefaultModel;
+        modelId ??= _aiSettings.Text.DefaultModel;
         return _kernel.GetRequiredService<IChatCompletionService>(modelId);
     }
 

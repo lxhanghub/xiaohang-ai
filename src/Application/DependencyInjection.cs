@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime;
 using Application;
+using Application.Common.AI.FunctionCalls;
 using Application.Common.AI.ModelSelector;
 using Application.Common.Behaviours;
 using Application.Options;
@@ -26,13 +27,27 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(SaveChangeBehaviour<,>));
         });
 
-        // Fix for CS1061: Ensure the Get<T>() method is used correctly with IConfiguration
-        var aiSettings = configuration.GetSection("AiModels").Get<AiSettings>();
+        services.Configure<AiModels>(configuration.GetSection(AiModels.Options).Bind);
+
+        var aimodels = configuration.GetSection("AiModels").Get<Dictionary<string, AiModelConfig>>() ?? [];
 
         var kernelBuilder = Kernel.CreateBuilder();
-        AddAIChatCompletion(kernelBuilder, aiSettings!.AiModels["Text"].Models);
-        // Fix for CS1503: Use a factory method to resolve IKernel  
-        services.AddSingleton(sp => kernelBuilder.Build());
+
+        AddAIChatCompletion(kernelBuilder, aimodels["Text"].Models);
+
+        var build = kernelBuilder.Build();
+
+        build.Plugins.AddFromType<WeatherPlugin>();
+        
+        services.AddSingleton(sp => build);
+
+        services.AddSingleton(sp =>
+        {
+            var kernel = sp.GetRequiredService<Kernel>();
+            var pluginPath = Path.Combine(AppContext.BaseDirectory, "Prompts");
+            return kernel.CreatePluginFromPromptDirectory(pluginPath);
+        });
+
         services.AddSingleton<IModelSelector, ModelSelector>();
 
         return services;

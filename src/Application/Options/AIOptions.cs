@@ -8,7 +8,7 @@ namespace Application.Options;
 public class AiModelConfig
 {
     public required string DefaultModel { get; set; } 
-    public Dictionary<string, AiModelDetails> Models { get; set; } = new();
+    public Dictionary<string, AiModelDetails> Models { get; set; } = [];
 }
 
 public class AiModelDetails
@@ -18,7 +18,10 @@ public class AiModelDetails
     public required string Endpoint { get; set; }
 }
 
-public class AiSettings
+public class AiModels
 {
-    public Dictionary<string, AiModelConfig> AiModels { get; set; } = new();
+    public const string Options = nameof(AiModels);
+    public required AiModelConfig Text { get; set; }
+    public required AiModelConfig Image { get; set; }
+    public required AiModelConfig Audio { get; set; }
 }
